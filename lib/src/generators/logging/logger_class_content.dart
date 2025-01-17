@@ -35,12 +35,12 @@ class SimpleLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    var color = PrettyPrinter.levelColors[event.level];
-    var emoji = PrettyPrinter.levelEmojis[event.level];
+    var color = PrettyPrinter.defaultLevelColors[event.level];
+    var emoji = PrettyPrinter.defaultLevelEmojis[event.level];
     var methodName = _getMethodName();
 
     var methodNameSection =
-        printCallingFunctionName && methodName != null && !kRelease ? ' | \$methodName' : '';
+        printCallingFunctionName && methodName != null && !kReleaseMode ? ' | \$methodName' : '';
     var stackLog = event.stackTrace.toString();
     var output =
         '\$emoji \$className\$methodNameSection - \${event.message}\${event.error != null ? '\\nERROR: \${event.error}\\n' : ''}\${printCallStack ? '\\nSTACKTRACE:\\n\$stackLog' : ''}';
