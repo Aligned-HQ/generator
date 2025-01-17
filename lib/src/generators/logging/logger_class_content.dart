@@ -11,6 +11,9 @@ const String loggerClassPrefex = '''
 /// import 'package:customer_app/services/stackdriver/stackdriver_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:teachers_assistant/services/google_cloud_logger_service.dart';
+
+import '../utils/google_cloud_logger_output.dart';
 ''';
 
 const String loggerClassConstantBody = '''
@@ -19,14 +22,14 @@ class SimpleLogPrinter extends LogPrinter {
   final String className;
   final bool printCallingFunctionName;
   final bool printCallStack;
-  final List<String> exludeLogsFromClasses;
+  final List<String> excludeLogsFromClasses;
   final String? showOnlyClass;
 
   SimpleLogPrinter(
     this.className, {
     this.printCallingFunctionName = true,
     this.printCallStack = false,
-    this.exludeLogsFromClasses = const [],
+    this.excludeLogsFromClasses = const [],
     this.showOnlyClass,
   });
 
@@ -37,12 +40,12 @@ class SimpleLogPrinter extends LogPrinter {
     var methodName = _getMethodName();
 
     var methodNameSection =
-        printCallingFunctionName && methodName != null ? ' | \$methodName' : '';
+        printCallingFunctionName && methodName != null && !kRelease ? ' | \$methodName' : '';
     var stackLog = event.stackTrace.toString();
     var output =
         '\$emoji \$className\$methodNameSection - \${event.message}\${event.error != null ? '\\nERROR: \${event.error}\\n' : ''}\${printCallStack ? '\\nSTACKTRACE:\\n\$stackLog' : ''}';
 
-    if (exludeLogsFromClasses
+    if (excludeLogsFromClasses
             .any((excludeClass) => className == excludeClass) ||
         (showOnlyClass != null && className != showOnlyClass)) return [];
 
@@ -146,16 +149,17 @@ Logger $logHelperNameKey(
   String className, {
   bool printCallingFunctionName = true,
   bool printCallstack = false,
-  List<String> exludeLogsFromClasses = const [],
+  List<String> excludeLogsFromClasses = const [],
   String? showOnlyClass,
 }) {
   return Logger(
+    filter: AllLogsFilter(),
     printer: SimpleLogPrinter(
       className,
       printCallingFunctionName: printCallingFunctionName,
       printCallStack: printCallstack,
       showOnlyClass: showOnlyClass,
-      exludeLogsFromClasses: exludeLogsFromClasses,
+      excludeLogsFromClasses: excludeLogsFromClasses,
     ),
     output: MultiOutput([
       $disableConsoleOutputInRelease
