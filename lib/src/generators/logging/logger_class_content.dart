@@ -193,7 +193,7 @@ Logger $logHelperNameKey(
       excludeLogsFromClasses: excludeLogsFromClasses,
       onLogEvent: (event) {
         if(event.level == Level.error) {
-            googleCloudLoggerOutput?._lastErrorEvent = event;
+            googleCloudLoggerOutput?.lastErrorEvent = event;
         }
       }
     ),
