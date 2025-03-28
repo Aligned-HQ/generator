@@ -115,5 +115,5 @@ String generateLibrary(
       ]),
   );
 
-  return DartFormatter().format(library.accept(emitter).toString());
+  return DartFormatter(DartFormatter.latestLanguageVersion).format(library.accept(emitter).toString());
 }
