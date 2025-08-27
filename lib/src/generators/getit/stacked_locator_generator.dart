@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:stacked_shared/stacked_shared.dart';
@@ -22,7 +21,7 @@ class StackedLocatorGenerator extends GeneratorForAnnotation<StackedApp> {
     BuildStep buildStep,
   ) async {
     final libs = await buildStep.resolver.libraries.toList();
-    final importResolver = ImportResolver(libs as List<LibraryElement2>, element.source?.uri.path ?? '');
+    final importResolver = ImportResolver(libs, element.source?.uri.path ?? '');
 
     final String locatorName =
         stackedApplication.peek('locatorName')!.stringValue;

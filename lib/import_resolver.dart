@@ -4,7 +4,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:path/path.dart' as p;
 
 class ImportResolver {
-  final List<LibraryElement2> libs;
+  final List<LibraryElement> libs;
   final String targetFilePath;
 
   const ImportResolver(this.libs, this.targetFilePath);
@@ -27,8 +27,8 @@ class ImportResolver {
     for (var lib in libs) {
       if (_isCoreLibrary(lib)) continue;
 
-      if (lib.exportNamespace.definedNames2.keys.contains(element?.displayName)) {
-        final package = lib.firstFragment.libraryFragment?.source.uri.pathSegments.first ?? '';
+      if (lib.exportNamespace.definedNames.keys.contains(element?.displayName)) {
+        final package = lib.source.uri.pathSegments.first ?? '';
         if (targetFilePath.startsWith(RegExp('^$package/'))) {
           return p.posix
               .relative(element?.source?.uri.path ?? '', from: targetFilePath)
@@ -44,16 +44,16 @@ class ImportResolver {
 
   String? _resolveElement2(Element2? element) {
     // return early if source is null or element is a core type
-    if (element?.firstFragment.libraryFragment?.source == null || _isCoreDartType(element)) {
+    if (element?.firstFragment.libraryFragment?.source == null || _isCoreDartTypeElement2(element)) {
       return null;
     }
 
     for (var lib in libs) {
-      if (_isCoreDartType(lib)) continue;
+      if (_isCoreLibrary(lib)) continue;
 
-      if (lib.exportNamespace.definedNames2.keys
+      if (lib.exportNamespace.definedNames.keys
           .contains(element?.displayName)) {
-        final package = lib.firstFragment.libraryFragment?.source.uri.pathSegments.first ?? '';
+        final package = lib.source.uri.pathSegments.first ?? '';
         if (targetFilePath.startsWith(RegExp('^$package/'))) {
           return p.posix
               .relative(element?.firstFragment.libraryFragment?.source.uri.path ?? '', from: targetFilePath)
@@ -67,7 +67,11 @@ class ImportResolver {
     return null;
   }
 
-  bool _isCoreDartType(Element2? element) {
+  bool _isCoreDartType(Element? element) {
+    return element?.source?.fullName == 'dart:core';
+  }
+
+  bool _isCoreDartTypeElement2(Element2? element) {
     return element?.firstFragment.libraryFragment?.source.fullName == 'dart:core';
   }
 
@@ -75,8 +79,8 @@ class ImportResolver {
     return element?.source?.fullName == 'dart:core';
   }
 
-  bool _isCoreLibrary(LibraryElement2? lib) {
-    return lib?.firstFragment.libraryFragment?.source.fullName == 'dart:core';
+  bool _isCoreLibrary(LibraryElement? lib) {
+    return lib?.source.fullName == 'dart:core';
   }
 
   Set<String> resolveAll(DartType type) {
