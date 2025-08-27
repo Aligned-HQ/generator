@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
@@ -18,7 +19,7 @@ class StackedLoggerGenerator extends GeneratorForAnnotation<StackedApp> {
   ) async {
     var loggerResolver = LoggerConfigResolver();
     var libs = await buildStep.resolver.libraries.toList();
-    var importResolver = ImportResolver(libs, element.source?.uri.path ?? '');
+    var importResolver = ImportResolver(libs as List<LibraryElement2>, element.source?.uri.path ?? '');
 
     final loggerConfig = await loggerResolver.resolve(
       annotation,

@@ -6,7 +6,7 @@ import 'package:stacked_generator/src/helpers/config_helper.dart';
 import 'package:stacked_generator/src/helpers/file_helper.dart';
 
 String toDisplayString(DartType e, {bool withNullability = false}) {
-  return e.getDisplayString(withNullability: withNullability);
+  return e.getDisplayString();
 }
 
 String processedReturnType(String? returnType) {

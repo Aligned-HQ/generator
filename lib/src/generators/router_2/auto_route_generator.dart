@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 // ignore: implementation_imports
@@ -75,7 +76,7 @@ class StackedRouterGenerator extends Generator {
       '.dart',
       '.gr.dart',
     );
-    return clazz.library.parts.any(
+    return clazz.library.units.any(
       (e) => e.toString().endsWith(part),
     );
   }

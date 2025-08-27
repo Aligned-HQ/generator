@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:stacked_generator/import_resolver.dart';
@@ -48,12 +49,12 @@ class DependencyConfigFactory {
         .cast<String>();
 
     // Get the import of the class type that's defined for the service
-    final import = importResolver.resolve(classElement!);
+    final import = importResolver.resolve(classElement as Element2?);
 
     final abstractedClassElement =
         dependencyAbstractedClassType?.element as ClassElement?;
 
-    final abstractedImport = importResolver.resolve(abstractedClassElement);
+    final abstractedImport = importResolver.resolve(abstractedClassElement as Element2?);
 
     final className = toDisplayString(dependencyClassType);
 
@@ -62,7 +63,7 @@ class DependencyConfigFactory {
         : null;
 
     // NOTE: This can be used for actual dependency inject. We do service location instead.
-    final constructor = classElement.unnamedConstructor;
+    final constructor = classElement?.unnamedConstructor;
 
     if (dependencyReader.instanceOf(const TypeChecker.fromRuntime(Factory))) {
       return FactoryDependency(

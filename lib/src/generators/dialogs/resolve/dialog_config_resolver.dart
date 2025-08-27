@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:stacked_generator/import_resolver.dart';
 import 'package:stacked_generator/src/generators/dialogs/dialog_config.dart';
@@ -21,10 +22,10 @@ class DialogConfigResolver {
       // Get the type of the dialog that we want to register
       final dialogClassType = dialogReader.read('classType').typeValue;
 
-      final classElement = dialogClassType.element as ClassElement?;
+      final classElement = dialogClassType.element3;
 
       // Get the import of the class type that's defined for the dialog
-      final import = importResolver.resolve(classElement!);
+      final import = importResolver.resolve(classElement as Element2?);
 
       final className = toDisplayString(dialogClassType);
 
