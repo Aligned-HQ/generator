@@ -1,6 +1,5 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:stacked_generator/import_resolver.dart';
@@ -49,12 +48,12 @@ class DependencyConfigFactory {
         .cast<String>();
 
     // Get the import of the class type that's defined for the service
-    final import = importResolver.resolve(classElement as Element2?);
+    final import = importResolver.resolve(classElement);
 
     final abstractedClassElement =
         dependencyAbstractedClassType?.element as ClassElement?;
 
-    final abstractedImport = importResolver.resolve(abstractedClassElement as Element2?);
+    final abstractedImport = importResolver.resolve(abstractedClassElement);
 
     final className = toDisplayString(dependencyClassType);
 
